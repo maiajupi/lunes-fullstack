@@ -1,15 +1,19 @@
 const Task = props => {
   // prop
-  const { text, done } = props.task; // destructuring
-  // render
-const style = {
-  textdecoration: done ? 'line-through': 'none'
-}
+  const { text, done, _id } = props.task; // destructuring
+  const { removeTask } = props;
+  const style = {
+    textdecoration: done ? 'line-through': 'none'
+};
+const handleClick = e => {
+  removeTask(_id);
+};
 
+//render
   return (
     <li style={style}>{text}
     <input type="checkbox" />
-    <button>X</button>
+    <button onClick={handleClick}>X</button>
     </li>
   );
 };

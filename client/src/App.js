@@ -1,40 +1,35 @@
 import Form from './Form';
 import TaskList from './TaskList';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const App = () => {
   //hooks
   const [tasks, setTasks] = useState([]);
   useEffect(() => {
-    const data =[
-      {
-        _id: 1,
-        text: ' lavar la ropa',
-        done: false
-      },
-      {
-        _id: 2,
-        text:'pasear al perro',
-        done: true
-      },
-      {
-        _id:3,
-        text: 'estudiar matematicas',
-        done: false
-      },
-    ];
-    setTasks(data);
+    axios.get('/api/tasks')
+    .then(res =>{
+      setTasks(res.data);
+    });
+
   }, []);
+
   //helpers
   const addTask = task => {
-    setTasks([...tasks, task]);
+    axios.post('./api/tasks', task)
+    .then(res =>{
+      setTasks([...tasks, res.data]);
+    });
+  };
+  const removeTask = id => {
+    setTasks(tasks.filter(t => t._id !== id))
   };
   // render
   return (
     <div className="container">
         <h1>Lista de Tareas</h1>
-        <Form />
-        <TaskList />
+        <Form addTask={addTask} />
+        <TaskList removeTask={removeTask} tasks={tasks} />
     </div>
   );
 }
